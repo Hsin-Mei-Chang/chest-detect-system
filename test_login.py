@@ -1,24 +1,45 @@
-from selenium import webdriver  # 瀏覽器驅動模組
-from webdriver_manager.chrome import ChromeDriverManager  # Chrome瀏覽器驅動模組
-from selenium.webdriver.chrome.options import Options  # 瀏覽器選項設定模組
-from selenium.webdriver.common.by import By  # 定位元素模組
-import time  # 時間模組
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+# 初始化 WebDriver
+driver = webdriver.Chrome()  # 確保 ChromeDriver 已安裝並配置好
 
-driver = webdriver.Chrome()
+try:
+    # 開啟目標網頁
+    driver.get("https://730e-2001-b011-e606-5d96-246e-262a-9cb1-5578.ngrok-free.app/login")  # 替換成表單所在的實際 URL
+    time.sleep(2)
 
-# 打開頁面
-driver.get("https://ce68-2001-b011-e606-5d96-246e-262a-9cb1-5578.ngrok-free.app/login")  # 本地網址
+    visit_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Visit Site')]")
+    visit_button.click()
+    # 顯式等待直到輸入框出現在頁面上
+    wait = WebDriverWait(driver, 10)
 
-# 定位帳號欄位
-email = driver.find_element(By.ID, "username")
- 
-# 定位密碼欄位
-password = driver.find_element(By.ID, "password")
+    # 找到 username 輸入框並輸入內容
+    username_input = wait.until(EC.presence_of_element_located((By.ID, "username")))
+    username_input.clear()  # 清空輸入框，防止有預設值
+    username_input.send_keys("B")  # 替換成實際的使用者名稱
 
-# 輸入帳號欄位資料
-email.send_keys("B")
- 
-# 輸入密碼欄位資料
-password.send_keys("B1234567")
+    # 找到 password 輸入框並輸入內容
+    password_input = wait.until(EC.presence_of_element_located((By.ID, "password")))
+    password_input.clear()  # 清空輸入框
+    password_input.send_keys("B1234567")  # 替換成實際的密碼
 
-password.submit()
+    # 找到並點擊登入按鈕
+    login_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@type='submit']")))
+    login_button.click()
+
+    # 驗證登入是否成功（可選）
+    # 這裡可以檢查登入後是否跳轉到預期的頁面，例如透過檢查某個特定元素是否存在
+    submit_button_next = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "btn-next")))
+    submit_button_next.click()
+    time.sleep(1)  # 等待頁面過渡效果
+    print("登入成功")
+
+except Exception as e:
+    print("操作出現問題：", e)
+
+finally:
+    # 關閉瀏覽器
+    driver.quit()
