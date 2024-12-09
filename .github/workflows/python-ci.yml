@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7","3.8","3.9","3.10","3.11"]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     steps:
       - uses: actions/checkout@v4
@@ -22,10 +22,20 @@ jobs:
           pip install selenium
           pip install webdriver-manager
 
-      - name: Set up Chromium
-        uses: browser-actions/setup-chromium@v2  # 安裝 Chrome 和 ChromeDriver
-        with:
-          chromium-version: 'latest'  # 使用最新版本的 Chromium
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome-stable --version | sed 's/[^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
+          wget https://chromedriver.storage.googleapis.com/$(wget -q -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run tests with unittest
         run: |
