@@ -11,7 +11,7 @@ class TestLoginLogout(unittest.TestCase):
     def setUpClass(cls):
         """初始化瀏覽器，執行所有測試前的設置"""
         cls.driver = webdriver.Chrome()  # 確保 ChromeDriver 已安裝並配置好
-        cls.driver.get("https://7545-61-216-116-70.ngrok-free.app/login")  # 替換成實際 URL
+        cls.driver.get("https://0a1e-61-216-55-185.ngrok-free.app/login")  # 替換成實際 URL
         cls.wait = WebDriverWait(cls.driver, 10)
 
     def test_login_and_logout(self):
