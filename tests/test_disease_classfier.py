@@ -19,7 +19,7 @@ class TestDiseaseClassifier(unittest.TestCase):
         options.add_argument("--disable-dev-shm-usage")
 
         cls.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        cls.driver.get("https://0a1e-61-216-55-185.ngrok-free.app/login")  # 替換成實際 URL
+        cls.driver.get("https://babd-61-216-116-70.ngrok-free.app/login")  # 替換成實際 URL
         cls.wait = WebDriverWait(cls.driver, 10)
 
     def test_disease_classifier(self):
