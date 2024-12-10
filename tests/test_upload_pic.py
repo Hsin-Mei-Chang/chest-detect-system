@@ -19,7 +19,7 @@ class TestAnnouncement(unittest.TestCase):
         options.add_argument("--disable-dev-shm-usage")
 
         cls.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        cls.driver.get("https://0a1e-61-216-55-185.ngrok-free.app/login")  # 替換成實際 URL
+        cls.driver.get("https://babd-61-216-116-70.ngrok-free.app/login")  # 替換成實際 URL
         cls.wait = WebDriverWait(cls.driver, 10)
 
     def test_announcement(self):
@@ -76,11 +76,26 @@ class TestAnnouncement(unittest.TestCase):
             # 驗證結果是否正確
             assert "辨識結果: Infiltration" in result_element.text
 
+            password_input = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "input-name")))
+            password_input.send_keys("Jary") 
+
+            password_input = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "input-ID-card-number")))
+            password_input.send_keys("I123456789") 
+
+            password_input = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "input-birth")))
+            password_input.send_keys("2020-01-05") 
+
+            password_input = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "input-remark")))
+            password_input.send_keys("24-12-10") 
+
             data_saved_button = self.driver.find_element(By.CLASS_NAME, "data-saved")
             self.driver.execute_script("arguments[0].click();", data_saved_button)
+            print("成功儲存該次看診紀錄")
+            time.sleep(1)
         finally:
             self.driver.quit()
             print("Test Finished")
+            
     @classmethod
     def tearDownClass(cls):
         """測試結束後關閉瀏覽器"""
